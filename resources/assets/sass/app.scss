@@ -1,12 +1,101 @@
 
-// Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
-
 // Variables
 @import 'variables';
 
-// Bootstrap
+// UIkit
 @import "~uikit/src/scss/variables-theme.scss";
 @import "~uikit/src/scss/mixins-theme.scss";
-
 @import "~uikit/src/scss/uikit-theme.scss";
+
+@import 'multiselect';
+@import 'flatpickr';
+@import 'progress';
+@import 'markdown';
+
+.background {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    z-index: -1000;
+    background-attachment: fixed;
+    background-size: cover;
+    background-image: url($APP_URL + '/img/background.svg');
+}
+
+.router-link-exact-active {
+  color: #666 !important;
+}
+
+.uk-sticky-fixed {
+  z-index: 5;
+}
+
+.visibility-hidden {
+  visibility: hidden;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.pre-wrap {
+  white-space: pre-wrap;
+}
+
+.monospace {
+  font-family: "Courier New", Courier, monospace;
+}
+
+.deep-shadow {
+  -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+.name-tag {
+  display: inline-block;
+  padding: 0 15px;
+  margin-right: 4px;
+  margin-top: 4px;
+  line-height: 28px;
+  font-size: 0.875rem;
+  border: 1px solid #e5e5e5;
+  vertical-align: middle;
+  text-align: center;
+  text-transform: uppercase;
+  color: #333;
+  cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+      user-select: none; 
+
+
+  &.clickable {
+    cursor: pointer;
+    transition: 0.1s ease-in-out;
+    transition-property: color, background-color, border-color;
+    &:hover:not(.disabled){
+      border-color: #b2b2b2;
+    }
+  }
+
+  &.disabled {
+    color: #999;
+  }
+}
+
+.page-title {
+  @extend .uk-h2;
+  display: inline-block;
+  @media only screen and (max-width: 640px) {
+    & {
+      margin-bottom: 10px;
+      margin-left: 10px;
+    }
+  }
+}
+
+.uk-tab > * {
+  padding-left: 0;
+  margin-left: 20px;
+}

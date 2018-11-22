@@ -1,10 +1,10 @@
-import UIkit from 'uikit';
+
 import Icons from 'uikit/dist/js/uikit-icons';
+import BASE_PATH from './base_path';
+
+window.UIkit = require('uikit');
 
 UIkit.use(Icons);
-
-window._ = require('lodash');
-window.Popper = require('popper.js').default;
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -22,27 +22,24 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  * a simple convenience so we don't have to attach every token manually.
  */
 
-let token = document.head.querySelector('meta[name="csrf-token"]');
+const token = document.head.querySelector('meta[name="csrf-token"]');
+window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 
-if (token) {
-    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
-} else {
-    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
-}
+axios.defaults.baseURL = BASE_PATH;
 
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
- */
-
-// import Echo from 'laravel-echo'
-
-// window.Pusher = require('pusher-js');
-
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//     encrypted: true
-// });
+axios.interceptors.response.use(null, (error) => {
+  if (error.response.status === 401 || error.response.status === 419) {
+    UIkit.modal.alert('登入已過期，點擊重新登入').then(() => {
+      axios.get('/save_route_before_redirect', { params: { route: window.location.href } }).then(() => {
+        window.location = `${BASE_PATH}cssso/redirect`;
+      });
+    });
+  }
+  if (error.response.status === 403) {
+    UIkit.modal.alert(error.response.data.message);
+  }
+  if (error.response.status === 500) {
+    UIkit.modal.alert('伺服器錯誤QQ');
+  }
+  return Promise.reject(error);
+});
